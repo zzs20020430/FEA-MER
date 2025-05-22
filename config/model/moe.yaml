@@ -1,0 +1,22 @@
+apply_moe: true
+rank: 64                          # ffn_num
+topk: 6
+num_experts: 12                   # 专家数量 2* domain_num
+task_id: -1                       # 待训练时补充
+num_tasks: 0                      # 待训练时补充为len(doamins)
+autorouter: false                 # 验证时设置为true
+
+disable_finetune: false           # 禁用微调，直接无效化专家
+train_mode: whole                 # whole 训练全部参数 / adapter 仅训练adapter进行微调
+
+
+domains:                          # 决定训练顺序和实际task_id
+- "mdpe"                          # 0  
+- "real_life"                     # 1
+# - "dolos"
+# - "dummy"
+
+domain_order: [1,0]                    # 决定训练顺序
+
+
+#考虑uppper_bound则会将以上数据集shuffle按比例划分train/test

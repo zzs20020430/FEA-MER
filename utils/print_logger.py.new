@@ -1,0 +1,79 @@
+# stdout logger
+import sys
+import functools
+
+class Logger(object):
+    def __init__(self, log_file=None):
+        self.terminal = sys.stdout
+        self.file = None
+        self._original_stdout = sys.stdout
+        self._is_active = False
+        self._log_file_path = log_file
+        if log_file:
+            self.file = open(log_file, "w")
+
+    def write(self, message):
+        if self._is_active:
+            self.terminal.write(message)
+            if self.file:
+                self.file.write(message)
+            self.flush()
+
+    # 清空输出缓冲区，把缓冲区内容写入到文件中
+    def flush(self):
+        if self._is_active and self.file:
+            self.file.flush()
+
+    def activate(self):
+        if not self._is_active:
+            sys.stdout = self
+            self._is_active = True
+
+    def deactivate(self):
+        if self._is_active:
+            sys.stdout = self._original_stdout
+            self._is_active = False
+
+    # 进入 with Logger("example.log") as logger: 时调用
+    def __enter__(self):
+        self.activate()
+        return self
+
+    # 离开 with Logger("example.log") as logger: 时调用
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.deactivate()
+        if self.file:
+            self.file.close()
+
+    # 设置新的日志文件路径
+    def set_log_file(self, new_log_file):
+        if self._is_active:
+            self.deactivate()
+        if self.file:
+            self.file.close()
+        self._log_file_path = new_log_file
+        if new_log_file:
+            self.file = open(new_log_file, "w")
+        if self._is_active:
+            self.activate()
+            
+    # 对象被删除时调用
+    def __del__(self):
+        self.deactivate()
+        if self.file:
+            self.file.close()
+   
+#@log_decorator(logger)自动启用日志记录     
+def log_decorator(logger:Logger):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            logger.activate()  # 激活日志记录
+            try:
+                result = func(*args, **kwargs)  # 执行被装饰的函数
+            finally:
+                logger.deactivate()  # 确保日志记录被停用
+                logger.file.close()  # 关闭日志文件
+            return result
+        return wrapper
+    return decorator

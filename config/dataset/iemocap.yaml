@@ -1,0 +1,15 @@
+dataset_path: /you/never/guess/IEMOCAP
+test_session: 2 #1-5
+batch_size: 4 #2   #8
+num_classes: 4  #9
+max_duration: 25 # 15 #25
+truncation: False      #True: 超过max_duration则截断, False: 超过max_duration则跳过加载
+augment: False        #True: 使用数据增强
+# augment: True
+
+# IEMOCAP|
+#     |-- Session1
+#     |-- Session2
+#     |-- Session3
+#     |-- Session4
+#     |-- Session5

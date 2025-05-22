@@ -1,0 +1,3 @@
+work_dir: real_life->mdpe num_experts_12 topk_6 sampled[mdpe] 2025-02-26 22:32:06    #指定的一个实验路径名
+
+cur_domain_order: 1    #大于0，获取task_id，然后去找domain[cur_domain_order-1]这个task_id计算遗忘率

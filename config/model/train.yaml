@@ -1,0 +1,28 @@
+batch_size: 32                     # 若数据集配置中没有则使用这个
+# num_epochs: 1000                 # 不同数据集，训练轮数不同，所以分离配置
+num_workers: 4
+# lr: 1e-4
+lr: 1e-4
+beta2: 0.999
+warmup_length: 100
+ls: 0.0                             # label smoothing
+seed: 42
+
+# 训练中动态更新的配置项
+ckpt_num: 5                          # 模型保存个数，超过则删除最旧的
+ckpt_dir: null                   # ~/#/null可以表示None，ckpt保存路径，与ckpt_filename(文件名) 拼接后使用
+frozen_dir: null                 # 冻结参数模块名文件·保存目录，与frozen_filename(文件名) 拼接后得到 frozen_path使用
+frozen: false                     # boolean: 冻结除了adapter以外的全部参数,默认先不冻结 
+
+log_dir: null                     # 日志保存路径，使用时动态拼接后确定
+target_metrics: [acc,'val_loss','f1','auc']                # 读取ckpt时的优先指标acc/auc/val_loss/train_loss/f1，默认为acc
+
+# urmf
+modulation_starts: 5
+modulation_ends: 100
+zeta: 0.01
+gradient_accumulation_steps: 1
+
+#urmf_scheduler
+lr_factor: 0.5
+lr_patience: 2

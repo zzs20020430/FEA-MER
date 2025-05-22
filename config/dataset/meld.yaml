@@ -1,0 +1,16 @@
+dataset_path: /you/never/guess/meld
+# batch_size: 4
+batch_size: 8
+num_classes: 7
+max_duration: 25
+
+train_dev: False
+test_dev: False
+augment: False
+truncation: True
+
+# meld|
+#     |-- train
+#     |-- dev
+#     |-- test
+#     |-- annotations
